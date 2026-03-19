@@ -1,0 +1,256 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
+    --bg-editor: #ffffff;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --border-color: #e2e8f0;
+    --border-hover: #cbd5e1;
+    --accent: #3b82f6;
+    --accent-hover: #2563eb;
+    --accent-light: #eff6ff;
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --diff-added: #dcfce7;
+    --diff-removed: #fee2e2;
+    --diff-changed: #fef9c3;
+    --highlight-bg: #fef08a;
+    --toolbar-bg: #f8fafc;
+    --panel-bg: #ffffff;
+    --shadow: 0 1px 3px rgba(0,0,0,0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+    --scrollbar-thumb: #cbd5e1;
+    --scrollbar-track: #f1f5f9;
+    --context-bg: #ffffff;
+    --context-hover: #f1f5f9;
+    --badge-bg: #e2e8f0;
+    --badge-text: #475569;
+    --type-string: #059669;
+    --type-number: #2563eb;
+    --type-boolean: #d97706;
+    --type-null: #9333ea;
+    --type-key: #0f172a;
+    --json-bracket: #64748b;
+  }
+
+  .dark {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --bg-editor: #1e293b;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border-color: #334155;
+    --border-hover: #475569;
+    --accent: #3b82f6;
+    --accent-hover: #60a5fa;
+    --accent-light: #1e3a5f;
+    --success: #4ade80;
+    --warning: #fbbf24;
+    --error: #f87171;
+    --diff-added: #14532d;
+    --diff-removed: #7f1d1d;
+    --diff-changed: #713f12;
+    --highlight-bg: #854d0e;
+    --toolbar-bg: #1e293b;
+    --panel-bg: #0f172a;
+    --shadow: 0 1px 3px rgba(0,0,0,0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.4);
+    --scrollbar-thumb: #475569;
+    --scrollbar-track: #1e293b;
+    --context-bg: #1e293b;
+    --context-hover: #334155;
+    --badge-bg: #334155;
+    --badge-text: #94a3b8;
+    --type-string: #4ade80;
+    --type-number: #60a5fa;
+    --type-boolean: #fbbf24;
+    --type-null: #c084fc;
+    --type-key: #f1f5f9;
+    --json-bracket: #94a3b8;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-150 
+           flex items-center gap-1.5 whitespace-nowrap select-none;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+  }
+  .btn-primary:hover {
+    background: var(--accent-hover);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+  }
+  .btn-ghost:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+  .tooltip {
+    @apply relative;
+  }
+  .tooltip::after {
+    content: attr(data-tooltip);
+    @apply absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded
+           whitespace-nowrap pointer-events-none opacity-0 transition-opacity duration-150 z-50;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    box-shadow: var(--shadow);
+  }
+  .tooltip:hover::after {
+    @apply opacity-100;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 3px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: var(--border-hover);
+  }
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Monaco editor overrides */
+.monaco-editor .margin,
+.monaco-editor .monaco-editor-background {
+  background: var(--bg-editor) !important;
+}
+
+/* Transition classes */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.15s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+.slide-enter-active, .slide-leave-active {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.slide-enter-from {
+  transform: translateY(-10px);
+  opacity: 0;
+}
+.slide-leave-to {
+  transform: translateY(10px);
+  opacity: 0;
+}
+
+/* Context menu */
+.context-menu {
+  background: var(--context-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+  border-radius: 8px;
+  padding: 4px;
+  min-width: 200px;
+  z-index: 1000;
+}
+.context-menu-item {
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-primary);
+  transition: background 0.1s;
+}
+.context-menu-item:hover {
+  background: var(--context-hover);
+}
+.context-menu-separator {
+  height: 1px;
+  background: var(--border-color);
+  margin: 4px 8px;
+}
+
+/* Resizer */
+.resizer {
+  width: 4px;
+  cursor: col-resize;
+  background: var(--border-color);
+  transition: background 0.15s;
+  position: relative;
+  z-index: 10;
+  flex-shrink: 0;
+}
+.resizer:hover, .resizer.active {
+  background: var(--accent);
+}
+.resizer::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: -4px; right: -4px;
+}
+
+/* Tree node animations */
+.tree-children-enter-active {
+  transition: all 0.15s ease;
+}
+.tree-children-leave-active {
+  transition: all 0.1s ease;
+}
+.tree-children-enter-from,
+.tree-children-leave-to {
+  opacity: 0;
+  max-height: 0;
+}
+
+/* Search highlight */
+.search-highlight {
+  background: var(--highlight-bg);
+  border-radius: 2px;
+  padding: 0 2px;
+}
+.search-highlight-active {
+  background: var(--accent);
+  color: white;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+/* Badge */
+.type-badge {
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--badge-bg);
+  color: var(--badge-text);
+}
