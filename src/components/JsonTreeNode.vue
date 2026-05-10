@@ -25,13 +25,13 @@
 
       <!-- Key name -->
       <span v-if="keyName !== null" class="node-key" @click="toggleExpand">
-        <span v-html="highlightText(displayKey)"></span>
+        <span v-html="highlightText(displayKey, 'key')"></span>
         <span class="colon">:</span>
       </span>
 
       <!-- Value display -->
       <template v-if="!isExpandable">
-        <span :class="'node-value type-' + valueType" v-html="highlightText(displayValue)"></span>
+        <span :class="'node-value type-' + valueType" v-html="highlightText(displayValue, 'value')"></span>
       </template>
       <template v-else>
         <span class="bracket" @click="toggleExpand">{{ openBracket }}</span>
@@ -229,7 +229,7 @@ const isFilteredOut = computed(() => {
   return true
 })
 
-function highlightText(text) {
+function highlightText(text, textType = 'value') {
   if (!jsonStore.searchQuery) return escapeHtml(text)
   const query = jsonStore.searchQuery.toLowerCase()
   const lowerText = text.toLowerCase()
@@ -238,7 +238,16 @@ function highlightText(text) {
   const before = text.substring(0, idx)
   const match = text.substring(idx, idx + query.length)
   const after = text.substring(idx + query.length)
-  const hlClass = isActiveMatch.value ? 'search-highlight-active' : 'search-highlight'
+  // Determine if THIS specific text (key vs value) is the active match
+  let isActive = false
+  if (isActiveMatch.value) {
+    const activeResult = jsonStore.searchResults[jsonStore.activeSearchIndex]
+    if (activeResult) {
+      // If the active result type matches what we're rendering, use the active class
+      isActive = activeResult.type === textType || activeResult.type === 'both'
+    }
+  }
+  const hlClass = isActive ? 'search-highlight-active' : 'search-highlight'
   return `${escapeHtml(before)}<span class="${hlClass}">${escapeHtml(match)}</span>${escapeHtml(after)}`
 }
 
