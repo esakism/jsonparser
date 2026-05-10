@@ -395,6 +395,7 @@ onBeforeUnmount(() => {
   flex-direction: column;
   overflow: hidden;
   position: relative;
+  min-height: 0;
 }
 
 .panel-header {
