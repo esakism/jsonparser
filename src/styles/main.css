@@ -148,6 +148,12 @@ body {
   background: var(--bg-editor) !important;
 }
 
+/* Ensure proper editor sizing within flex panels */
+.left-panel {
+  min-height: 0;
+  overflow: hidden;
+}
+
 /* Transition classes */
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.15s ease;
