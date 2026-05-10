@@ -158,6 +158,9 @@ onBeforeUnmount(() => {
 <style scoped>
 .editor-container {
   flex: 1;
+  min-height: 0;
+  height: 0;
   overflow: hidden;
+  position: relative;
 }
 </style>
