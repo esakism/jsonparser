@@ -30,8 +30,10 @@ const treeContainer = ref(null)
 // Provide the scroll container to child nodes so they can scroll into view
 provide('treeScrollContainer', treeContainer)
 
-// Watch the active search index and scroll to the active match node
-watch(() => jsonStore.activeSearchIndex, async () => {
+// Watch the search revision counter to reliably scroll to the active match node.
+// Using searchRevision instead of activeSearchIndex ensures the watcher fires even when
+// the index stays at 0 (e.g. repeated searches, first result navigation).
+watch(() => jsonStore.searchRevision, async () => {
   if (jsonStore.searchResults.length === 0) return
   const activeResult = jsonStore.searchResults[jsonStore.activeSearchIndex]
   if (!activeResult) return
@@ -42,7 +44,7 @@ watch(() => jsonStore.activeSearchIndex, async () => {
   // Wait for DOM update after expansion
   await nextTick()
   // Small extra delay to ensure nested nodes have rendered
-  await new Promise(r => setTimeout(r, 50))
+  await new Promise(r => setTimeout(r, 60))
 
   // Find the active match element and scroll to it
   const container = treeContainer.value
