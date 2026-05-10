@@ -20,6 +20,7 @@ export const useJsonStore = defineStore('json', () => {
   const searchQuery = ref('')
   const searchResults = ref([])
   const activeSearchIndex = ref(0)
+  const searchRevision = ref(0) // incremented on every search navigation to force watcher triggers
   const searchMode = ref('both') // 'keys', 'values', 'both'
   const filterMode = ref(false)
 
@@ -204,11 +205,9 @@ export const useJsonStore = defineStore('json', () => {
     const query = searchQuery.value.toLowerCase()
     searchNode(parsedJson.value, '$', query, results)
     searchResults.value = results
-    // Force watcher trigger: set to -1 first then 0 so the watcher always fires
-    activeSearchIndex.value = -1
-    if (results.length > 0) {
-      activeSearchIndex.value = 0
-    }
+    activeSearchIndex.value = results.length > 0 ? 0 : 0
+    // Always bump revision so the watcher fires even if activeSearchIndex stays at 0
+    searchRevision.value++
   }
 
   function searchNode(node, path, query, results) {
@@ -246,12 +245,14 @@ export const useJsonStore = defineStore('json', () => {
   function nextSearchResult() {
     if (searchResults.value.length > 0) {
       activeSearchIndex.value = (activeSearchIndex.value + 1) % searchResults.value.length
+      searchRevision.value++
     }
   }
 
   function prevSearchResult() {
     if (searchResults.value.length > 0) {
       activeSearchIndex.value = (activeSearchIndex.value - 1 + searchResults.value.length) % searchResults.value.length
+      searchRevision.value++
     }
   }
 
@@ -459,7 +460,7 @@ export const useJsonStore = defineStore('json', () => {
   return {
     rawInput, parsedJson, parseError, isValid, fileName, fileSize,
     history, historyIndex,
-    searchQuery, searchResults, activeSearchIndex, searchMode, filterMode,
+    searchQuery, searchResults, activeSearchIndex, searchRevision, searchMode, filterMode,
     expandedNodes, expandDepth,
     pinnedPaths,
     compareMode, compareInput, compareParsed, compareError, diffResults,
