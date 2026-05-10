@@ -22,7 +22,7 @@
     </div>
     
     <div class="search-actions">
-      <select v-model="jsonStore.searchMode" class="search-mode" @change="debouncedSearch">
+      <select v-model="jsonStore.searchMode" class="search-mode" @change="onModeChange">
         <option value="both">Keys & Values</option>
         <option value="keys">Keys Only</option>
         <option value="values">Values Only</option>
@@ -65,6 +65,12 @@ function debouncedSearch() {
   }, 200)
 }
 
+function onModeChange() {
+  // When switching search mode, perform the search immediately (no debounce)
+  clearTimeout(debounceTimer)
+  jsonStore.performSearch()
+}
+
 function navigateNext() {
   // If search hasn't been triggered yet (user typed then pressed Enter), perform it first
   if (jsonStore.searchQuery && jsonStore.searchResults.length === 0) {
@@ -73,7 +79,6 @@ function navigateNext() {
   }
   if (jsonStore.searchResults.length > 0) {
     jsonStore.nextSearchResult()
-    // The watcher in JsonTreeViewer handles the scroll
   }
 }
 
